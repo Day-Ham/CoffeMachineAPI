@@ -1,3 +1,5 @@
+using CoffeeMachineAPI.DTOs;
+
 var builder = WebApplication.CreateBuilder(args);
 var app = builder.Build();
 const string apiKey= "aefa89ddb40bc09ad524ecaeef1afec1";
@@ -19,7 +21,12 @@ app.MapGet("/brew-coffee", () =>
     }
     else
     {
-    return Results.Ok($"Number of Coffes brewed{totalNumberOfCalls}");
+        var response = new CoffeeResponseDTO
+        {
+        Message = "Your piping hot coffee is ready",
+        Prepared = DateTimeOffset.Now.ToString("yyyy-MM-ddTHH:mm:sszzz").Replace(":", "")
+        };
+        return Results.Ok(response);
         
     }
 
