@@ -11,23 +11,40 @@ app.MapGet("/brew-coffee", async () =>
 {
     var DateToday= DateTime.Now;
     
-    if(DateToday.Month==4 && DateToday.Day == 1)
+    if(DateToday.Month==4 && DateToday.Day == 1) //Safety Check
     {
         return Results.StatusCode(418);
     }
     totalNumberOfCalls++;
-    if (totalNumberOfCalls % 5 == 0)
+    if (totalNumberOfCalls % 5 == 0) //Safety Check
     {
         return Results.StatusCode(503);
     }
-    else
+    else // this is where we make coffee
     {
-        var response = new CoffeeResponseDTO
+        
+        using var client = new HttpClient();
+        var weather = await client.GetFromJsonAsync<dynamic>(url);
+        double temp = weather?.GetProperty("main").GetProperty("temp").GetDouble();
+
+        if (temp > 30)
         {
-        Message = "Your piping hot coffee is ready",
-        Prepared = DateTimeOffset.Now.ToString("yyyy-MM-ddTHH:mm:sszzz").Replace(":", "")
-        };
-        return Results.Ok(response);
+            var response = new CoffeeResponseDTO
+            {
+            Message = "Your refreshing iced coffee is ready",
+            Prepared = DateTimeOffset.Now.ToString("yyyy-MM-ddTHH:mm:sszzz").Replace(":", "")
+            };
+            return Results.Ok(response);
+        }
+        else
+        {
+            var response = new CoffeeResponseDTO
+            {
+            Message = "Your piping hot coffee is ready",
+            Prepared = DateTimeOffset.Now.ToString("yyyy-MM-ddTHH:mm:sszzz").Replace(":", "")
+            };
+            return Results.Ok(response);
+        }
         
     }
 
