@@ -5,7 +5,7 @@ var app = builder.Build();
 const string apiKey= "aefa89ddb40bc09ad524ecaeef1afec1";
 const string city = "Manila";
 const string url = $"https://api.openweathermap.org/data/2.5/weather?q={city}&appid={apiKey}&units=metric";
-int totalNumberOfCalls=0; // i think this might cause some issues if it were a real environment
+int totalNumberOfCalls=0; // i think this might cause some issues if it were a real environment but for this case I think is fine
 app.MapGet("/", () => "Hello Coffee is Ready!");
 app.MapGet("/brew-coffee", async () =>
 {
@@ -29,7 +29,7 @@ app.MapGet("/brew-coffee", async () =>
 
         if (temp > 30)
         {
-            var response = new CoffeeResponseDTO
+            var response = new CoffeeResponseDTO // Think I can make this better 
             {
             Message = "Your refreshing iced coffee is ready",
             Prepared = DateTimeOffset.Now.ToString("yyyy-MM-ddTHH:mm:sszzz").Replace(":", "")
