@@ -3,21 +3,22 @@ using CoffeeMachineAPI.DTOs;
 var builder = WebApplication.CreateBuilder(args);
 var app = builder.Build();
 const string apiKey= "aefa89ddb40bc09ad524ecaeef1afec1";
-const string city = "Manila"; // Or use lat/lon
+const string city = "Manila";
 const string url = $"https://api.openweathermap.org/data/2.5/weather?q={city}&appid={apiKey}&units=metric";
-int totalNumberOfCalls=0;
+int totalNumberOfCalls=0; // i think this might cause some issues if it were a real environment
 app.MapGet("/", () => "Hello Coffee is Ready!");
-app.MapGet("/brew-coffee", () =>
+app.MapGet("/brew-coffee", async () =>
 {
     var DateToday= DateTime.Now;
+    
+    if(DateToday.Month==4 && DateToday.Day == 1)
+    {
+        return Results.StatusCode(418);
+    }
     totalNumberOfCalls++;
     if (totalNumberOfCalls % 5 == 0)
     {
         return Results.StatusCode(503);
-    }
-    else if(DateToday.Month==4 && DateToday.Day == 1)
-    {
-        return Results.StatusCode(418);
     }
     else
     {
